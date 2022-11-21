@@ -1,6 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
+using TestWebApi.Exceptions;
+using TestWebApi.Helpers;
 using TestWebApi.Models;
 using TestWebApi.Services;
 
@@ -18,22 +23,24 @@ namespace TestWebApi.Controllers
         }
 
         [HttpGet(Name = "GetAllReservations")]
-        public List<Reservation> GetAllReservations()
+        public Reservation[] GetAllReservations()
         {
             return _reservationService.GetAll()
-                .ToList();
+                .ToArray();
         }
 
         [HttpPost("PostReservation")]
-        public void PostReservation(long bookId, string comment)
+        public HttpResponseMessage PostReservation(long bookId, string comment)
         {
-            _reservationService.Add(bookId, comment);
+            return ResponseHelper.ThrowCatch(
+                () => _reservationService.Add(bookId, comment));
         }
 
         [HttpPost("RemoveReservation")]
-        public void RemoveReservation(long bookId)
+        public HttpResponseMessage RemoveReservation(long bookId)
         {
-            _reservationService.Remove(bookId);
+            return ResponseHelper.ThrowCatch(
+                () => _reservationService.Remove(bookId));
         }
     }
 }

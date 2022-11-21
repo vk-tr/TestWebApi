@@ -9,6 +9,8 @@ namespace TestWebApi.Contexts
         public DbSet<Book> Books { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
 
+        public DbSet<ReservationLog> ReservationLogs { get; set; }
+
         public DataBaseContext()
         {
             Database.EnsureCreated();
@@ -22,6 +24,7 @@ namespace TestWebApi.Contexts
         {
             CreateBooksTable(modelBuilder.Entity<Book>());
             CreateReservationsTable(modelBuilder.Entity<Reservation>());
+            CreateReservationsLgoTable(modelBuilder.Entity<ReservationLog>());
         }
 
         private void CreateBooksTable(EntityTypeBuilder<Book> books)
@@ -31,7 +34,6 @@ namespace TestWebApi.Contexts
 
             books.Property(book => book.Id).IsRequired();
             books.Property(book => book.Title).IsRequired();
-            books.Property(book => book.IsReserved);
         }
 
         private void CreateReservationsTable(EntityTypeBuilder<Reservation> reservations)
@@ -42,6 +44,18 @@ namespace TestWebApi.Contexts
             reservations.Property(res => res.Id).IsRequired();
             reservations.Property(res => res.BookId).IsRequired();
             reservations.Property(res => res.Comment);
+        }
+
+        private void CreateReservationsLgoTable(EntityTypeBuilder<ReservationLog> reservationLogs)
+        {
+            reservationLogs.ToTable(nameof(DataBaseContext.ReservationLogs))
+                .HasKey(res => res.Id);
+
+            reservationLogs.Property(res => res.Id).IsRequired();
+            reservationLogs.Property(res => res.BookId).IsRequired();
+            reservationLogs.Property(res => res.DateTime).IsRequired();
+            reservationLogs.Property(res => res.Status).IsRequired();
+            reservationLogs.Property(res => res.Comment);
         }
     }
 }
