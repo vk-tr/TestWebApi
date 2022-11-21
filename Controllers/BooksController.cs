@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
+using TestWebApi.Helpers;
 using TestWebApi.Models;
 using TestWebApi.Services;
 
@@ -17,22 +19,38 @@ namespace TestWebApi.Controllers
             _booksService = booksService;
         }
 
+        [HttpPost("Create4SampleBooks")]
+        public HttpResponseMessage Create4SampleBooks()
+        {
+            return ResponseHelper.ThrowCatch(
+                () => _booksService.CreateSample());
+        }
+
         [HttpGet("GetAllBooks")]
-        public List<Book> GetAllBooks()
+        public Book[] GetAllBooks()
         {
-            return _booksService.GetAll().ToList();
+            return _booksService.GetAll()
+                .ToArray();
         }
 
-        [HttpPost("PostBook")]
-        public void Post(string title, string author)
+        [HttpPost("AddNewBook")]
+        public HttpResponseMessage AddNewBook(string title, string author)
         {
-            _booksService.Add(title, author);
+            return ResponseHelper.ThrowCatch(
+                () => _booksService.Add(title, author));
         }
 
-        [HttpPost("GetAvailableBooks")]
+        [HttpGet("GetAvailableBooks")]
         public Book[] GetAvailableBooks()
         {
-            return _booksService.GetAvailableBooks().ToArray();
+            return _booksService.GetAvailableBooks()
+                .ToArray();
+        }
+
+        [HttpGet("GetBookStatusHistory")]
+        public string GetBookStatusHistory(long bookId)
+        {
+            return _booksService.GetStatusHistory(bookId);
         }
     }
 }

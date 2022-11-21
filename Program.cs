@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TestWebApi.Contexts;
-using TestWebApi.Models;
 using TestWebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ReservationsService, ReservationsService>();
+builder.Services.AddScoped<ReservationLogsService, ReservationLogsService>();
 builder.Services.AddScoped<BooksService, BooksService>();
 
 var app = builder.Build();

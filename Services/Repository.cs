@@ -31,7 +31,7 @@ namespace TestWebApi.Services
         public void Add<TEntity>(TEntity entity) where TEntity : class, IHaveId
         {
             var dbSet = _context.Set<TEntity>();
-            dbSet.Remove(entity);
+            dbSet.Add(entity);
 
             _context.SaveChanges();
         }
