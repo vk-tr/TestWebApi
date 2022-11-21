@@ -6,28 +6,33 @@ using TestWebApi.Interfaces;
 
 namespace TestWebApi.Services
 {
-    public sealed class Repository<TEntity> : IRepository<TEntity> where TEntity : class, IHaveId
+    public sealed class Repository : IRepository
     {
         private DataBaseContext _context;
         public Repository(DataBaseContext context)
         {
             _context = context;
         }
-        private DbSet<TEntity>? DbSet => _context.Set<TEntity>();
 
-        public IQueryable<TEntity>? GetAll()
+        public IQueryable<TEntity> GetAll<TEntity>() where TEntity : class, IHaveId
         {
             var dbSet = _context.Set<TEntity>();
-            return DbSet?.AsQueryable();
+            return dbSet.AsQueryable();
         }
-        public void Remove(TEntity entity)
+
+        public void Remove<TEntity>(TEntity entity) where TEntity : class, IHaveId
         {
-            DbSet?.Remove(entity);
+            var dbSet = _context.Set<TEntity>();
+            dbSet.Remove(entity);
+
             _context.SaveChanges();
         }
-        public void Add(TEntity entity)
+
+        public void Add<TEntity>(TEntity entity) where TEntity : class, IHaveId
         {
-            DbSet?.Add(entity);
+            var dbSet = _context.Set<TEntity>();
+            dbSet.Remove(entity);
+
             _context.SaveChanges();
         }
 
