@@ -7,21 +7,21 @@ namespace TestWebApi.Services
 {
     public class ReservationsService
     {
-        private readonly IRepository<Reservation> _reservationRepository;
+        private readonly IRepository _repository;
 
         public ReservationsService()
         {
-            _reservationRepository = new Repository<Reservation>(new DataBaseContext());
+            _repository = new Repository(new DataBaseContext());
         }
 
         public IQueryable<Reservation> GetAll()
         {
-            return _reservationRepository.GetAll();
+            return _repository.GetAll<Reservation>();
         }
 
         public void Remove(long bookId)
         {
-            var reservationToRemove = _reservationRepository.GetAll()
+            var reservationToRemove = _repository.GetAll<Reservation>()
                 .FirstOrDefault(x => x.BookId == bookId);
 
             if (reservationToRemove == default)
@@ -29,12 +29,12 @@ namespace TestWebApi.Services
                 return;
             }
 
-            _reservationRepository.Remove(reservationToRemove);
+            _repository.Remove(reservationToRemove);
         }
 
         public void Add(long bookId, string comment)
         {
-            var hasReservationWithThatBook = _reservationRepository.GetAll()
+            var hasReservationWithThatBook = _repository.GetAll<Reservation>()
                 .Select(x => x.BookId)
                 .Any(x => x == bookId);
 
@@ -49,7 +49,7 @@ namespace TestWebApi.Services
                 Comment = comment
             };
 
-            _reservationRepository.Add(newEntity);
+            _repository.Add(newEntity);
         }
     }
 }

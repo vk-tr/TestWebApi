@@ -15,7 +15,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
 builder.Services.AddScoped<ReservationsService, ReservationsService>();
 builder.Services.AddScoped<BooksService, BooksService>();
 

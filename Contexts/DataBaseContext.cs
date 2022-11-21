@@ -31,7 +31,6 @@ namespace TestWebApi.Contexts
 
             books.Property(book => book.Id).IsRequired();
             books.Property(book => book.Title).IsRequired();
-
             books.Property(book => book.IsReserved);
         }
 

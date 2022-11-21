@@ -3,12 +3,15 @@ using System.Linq;
 
 namespace TestWebApi.Interfaces
 {
-    public interface IRepository<TEntity> : IDisposable where TEntity : IHaveId
+    public interface IRepository : IDisposable
     {
-        IQueryable<TEntity> GetAll();
+        IQueryable<TEntity> GetAll<TEntity>()
+            where TEntity : class, IHaveId;
 
-        void Remove(TEntity entity);
+        void Remove<TEntity>(TEntity entity)
+            where TEntity : class ,IHaveId;
 
-        void Add(TEntity entity);
+        void Add<TEntity>(TEntity entity)
+            where TEntity : class, IHaveId;
     }
 }

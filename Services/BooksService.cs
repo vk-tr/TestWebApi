@@ -7,18 +7,16 @@ namespace TestWebApi.Services
 {
     public class BooksService
     {
-        private readonly IRepository<Book> _bookRepository;
-        private readonly IRepository<Reservation> _reservationRepository;
+        private readonly IRepository _repository;
 
         public BooksService()
         {
-            _bookRepository = new Repository<Book>(new DataBaseContext());
-            _reservationRepository = new Repository<Reservation>(new DataBaseContext());
+            _repository = new Repository(new DataBaseContext());
         }
 
         public IQueryable<Book> GetAll()
         {
-            return _bookRepository.GetAll();
+            return _repository.GetAll<Book>();
         }
 
         public void Add(string title, string author)
@@ -29,16 +27,16 @@ namespace TestWebApi.Services
                 Author = author
             };
 
-            _bookRepository.Add(newEntity);
+            _repository.Add(newEntity);
         }
 
         public IQueryable<Book> GetAvailableBooks()
         {
-            var reservationIds = _reservationRepository.GetAll()
+            var reservationIds = _repository.GetAll<Reservation>()
                 .Select(x => x.BookId);
 
-            return _bookRepository.GetAll()
-                .Where(x => reservationIds.Any(y => y == x.Id));
+            return _repository.GetAll<Book>()
+                .Where(x => !reservationIds.Any(y => y == x.Id));
         }
     }
 }
